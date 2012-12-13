@@ -57,6 +57,7 @@ module CloudPrint
     get_existing_access_token != nil && get_existing_access_token.token && get_existing_access_token.token.strip != "" && !get_existing_access_token.expired?
   end
 
+
   def self.get_existing_access_token
     @oauth2_access_token
   end

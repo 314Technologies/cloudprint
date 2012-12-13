@@ -46,29 +46,27 @@ module CloudPrint
     end
 
     class << self
+      def _new_from_response(response_hash)
+        new Util.normalize_response_data(response_hash)
+      end
+
+      def find_by_id(id)
+        fetch_jobs.select{ |job| job['id'] == id }.first
+      end
+
       def find(jobid)
         job = find_by_id(jobid)
         return nil if job.nil?
         _new_from_response job
       end
 
-      def all
-        fetch_jobs.map { |j| _new_from_response j }
-      end
-
-      def _new_from_response(response_hash)
-        new Util.normalize_response_data(response_hash)
-      end
-
-      private
-
-      def find_by_id(id)
-        fetch_jobs.select{ |job| job['id'] == id }.first
-      end
-
       def fetch_jobs
         response = CloudPrint.connection.get('/jobs') || {}
         response['jobs'] || []
+      end
+
+      def all
+        fetch_jobs.map { |j| _new_from_response j }
       end
     end
   end
